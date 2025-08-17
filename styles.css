@@ -110,6 +110,68 @@ body {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
 }
 
+/* 使用说明区域 */
+.instructions-section {
+    padding: 30px 40px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-bottom: 1px solid #e9ecef;
+}
+
+.instructions-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.instructions-container h3 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.instructions-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.instruction-item:hover {
+    transform: translateY(-1px);
+}
+
+.instruction-number {
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.instruction-item p {
+    margin: 0;
+    color: #424242;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
 /* 编码选择区域 */
 .encoding-section {
     padding: 30px 40px;
@@ -270,6 +332,7 @@ body {
     }
     
     .upload-section,
+    .instructions-section,
     .encoding-section,
     .preview-section {
         padding: 25px 20px;
@@ -301,6 +364,21 @@ body {
     
     .upload-icon {
         font-size: 3rem;
+    }
+    
+    .instructions-container h3 {
+        font-size: 1.2rem;
+    }
+    
+    .instruction-item {
+        padding: 12px 15px;
+        gap: 12px;
+    }
+    
+    .instruction-number {
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
     }
 }
 
