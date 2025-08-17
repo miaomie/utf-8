@@ -19,21 +19,32 @@ const downloadBtn = document.getElementById('downloadBtn');
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('页面加载完成，开始初始化');
     initializeEventListeners();
+    
+    // 移动设备兼容性检查
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        console.log('检测到移动设备');
+        // 确保文件输入框在移动设备上正常工作
+        fileInput.addEventListener('touchstart', function(e) {
+            console.log('触摸事件触发');
+        });
+    }
 });
 
 // 初始化事件监听器
 function initializeEventListeners() {
+    console.log('初始化事件监听器');
+    
     // 文件选择事件
     fileInput.addEventListener('change', handleFileSelect);
+    console.log('文件选择事件监听器已添加');
     
     // 拖拽事件
     uploadArea.addEventListener('dragover', handleDragOver);
     uploadArea.addEventListener('dragleave', handleDragLeave);
     uploadArea.addEventListener('drop', handleDrop);
-    
-    // 点击上传区域
-    uploadArea.addEventListener('click', () => fileInput.click());
+    console.log('拖拽事件监听器已添加');
     
     // 编码选择变化事件
     sourceEncoding.addEventListener('change', handleEncodingChange);
@@ -43,13 +54,19 @@ function initializeEventListeners() {
     
     // 下载按钮事件
     downloadBtn.addEventListener('click', handleDownload);
+    
+    console.log('所有事件监听器初始化完成');
 }
 
 // 处理文件选择
 function handleFileSelect(event) {
+    console.log('文件选择事件触发', event);
     const file = event.target.files[0];
     if (file) {
+        console.log('选择的文件:', file.name, file.size, file.type);
         processFile(file);
+    } else {
+        console.log('没有选择文件');
     }
 }
 
@@ -78,8 +95,11 @@ function handleDrop(event) {
 
 // 处理文件
 function processFile(file) {
+    console.log('开始处理文件:', file.name);
+    
     // 检查文件类型
     if (!file.name.toLowerCase().endsWith('.txt')) {
+        console.log('文件类型不匹配:', file.type);
         showMessage('请选择 .txt 文件', 'error');
         return;
     }
@@ -87,39 +107,49 @@ function processFile(file) {
     // 检查文件大小 (50MB = 50 * 1024 * 1024 bytes)
     const maxSize = 50 * 1024 * 1024;
     if (file.size > maxSize) {
+        console.log('文件过大:', file.size);
         showMessage('文件大小不能超过 50MB', 'error');
         return;
     }
     
+    console.log('文件验证通过，开始读取');
     currentFile = file;
     
     // 读取文件内容
     const reader = new FileReader();
     reader.onload = function(e) {
+        console.log('文件读取完成，开始处理');
         try {
             // 保存原始的ArrayBuffer
             originalArrayBuffer = e.target.result;
+            console.log('ArrayBuffer大小:', originalArrayBuffer.byteLength);
             
             // 尝试检测编码
             const detectedEncoding = detectEncoding(originalArrayBuffer);
+            console.log('检测到的编码:', detectedEncoding);
             
-            // 设置检测到的编码
-            sourceEncoding.value = detectedEncoding;
+            // 如果检测到的是UTF-8，但用户希望默认用GBK，则设置为GBK
+            // 否则使用检测到的编码
+            const defaultEncoding = detectedEncoding === 'utf-8' ? 'gbk' : detectedEncoding;
+            console.log('使用的默认编码:', defaultEncoding);
+            sourceEncoding.value = defaultEncoding;
             
             // 显示编码选择区域
             encodingSection.style.display = 'block';
             
             // 显示原始内容预览
-            showOriginalPreview(originalArrayBuffer, detectedEncoding);
+            showOriginalPreview(originalArrayBuffer, defaultEncoding);
             
             showMessage(`文件 "${file.name}" 上传成功！检测到编码: ${detectedEncoding}`, 'success');
             
         } catch (error) {
+            console.error('文件处理错误:', error);
             showMessage('文件读取失败: ' + error.message, 'error');
         }
     };
     
     reader.onerror = function() {
+        console.error('FileReader错误:', reader.error);
         showMessage('文件读取失败', 'error');
     };
     
@@ -298,8 +328,8 @@ function detectEncoding(arrayBuffer) {
         return 'utf-16be';
     }
     
-    // 优先尝试GBK编码（适合中文文件）
-    const encodings = ['gbk', 'gb2312', 'utf-8', 'big5', 'shift_jis', 'euc-jp', 'euc-kr', 'iso-8859-1', 'windows-1252'];
+    // 尝试不同的编码来检测
+    const encodings = ['utf-8', 'gbk', 'gb2312', 'big5', 'shift_jis', 'euc-jp', 'euc-kr', 'iso-8859-1', 'windows-1252'];
     
     for (let encoding of encodings) {
         try {
@@ -330,8 +360,8 @@ function detectEncoding(arrayBuffer) {
         }
     }
     
-    // 默认返回GBK（适合中文文件）
-    return 'gbk';
+    // 默认返回UTF-8
+    return 'utf-8';
 }
 
 // 检查是否为有效的UTF-8
