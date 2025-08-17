@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本编码浏览器工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>文本编码浏览器工具</h1>
+            <p>支持多种编码格式，轻松转换为UTF-8</p>
+        </header>
+
+        <main class="main-content">
+            <!-- 文件上传区域 -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>选择或拖拽文件</h3>
+                    <p>支持 .txt 文件，最大 50MB</p>
+                    <input type="file" id="fileInput" accept=".txt" hidden>
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        选择文件
+                    </button>
+                </div>
+            </section>
+
+            <!-- 编码选择和转换区域 -->
+            <section class="encoding-section" id="encodingSection" style="display: none;">
+                <div class="encoding-controls">
+                    <div class="control-group">
+                        <label for="sourceEncoding">源文件编码：</label>
+                        <select id="sourceEncoding">
+                            <option value="gbk" selected>GBK</option>
+                            <option value="gb2312">GB2312</option>
+                            <option value="utf-8">UTF-8</option>
+                            <option value="big5">Big5</option>
+                            <option value="shift_jis">Shift-JIS</option>
+                            <option value="euc-jp">EUC-JP</option>
+                            <option value="euc-kr">EUC-KR</option>
+                            <option value="iso-8859-1">ISO-8859-1</option>
+                            <option value="windows-1252">Windows-1252</option>
+                            <option value="utf-16">UTF-16</option>
+                        </select>
+                    </div>
+                    <button class="convert-btn" id="convertBtn">转换为UTF-8</button>
+                </div>
+            </section>
+
+            <!-- 预览区域 -->
+            <section class="preview-section" id="previewSection" style="display: none;">
+                <div class="preview-container">
+                    <div class="preview-panel">
+                        <h3>转换前预览</h3>
+                        <div class="preview-content">
+                            <pre id="originalPreview"></pre>
+                        </div>
+                        <div class="file-info">
+                            <span id="originalInfo"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-panel">
+                        <h3>转换后预览 (UTF-8)</h3>
+                        <div class="preview-content">
+                            <pre id="convertedPreview"></pre>
+                        </div>
+                        <div class="file-info">
+                            <span id="convertedInfo"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button class="download-btn" id="downloadBtn" style="display: none;">
+                        下载转换后的文件
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>文本编码浏览器工具 - 让编码转换变得简单</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
